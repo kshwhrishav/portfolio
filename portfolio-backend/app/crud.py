@@ -13,7 +13,7 @@ def get_user_by_id(db: Session, id: int):
 
 def create_user(db: Session, user: schemas.UserCreate):
     hashed_pw = pwd_context.hash(user.password)
-    db_user = models.User(email=user.email, full_name=user.full_name, hashed_password=hashed_pw)
+    db_user = models.User(email=user.email, first_name=user.first_name, last_name=user.last_name, role=user.role, hashed_password=hashed_pw)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -31,7 +31,8 @@ def update_user(db: Session, id: int, user: schemas.UserUpdate):
     existing = db.query(models.User).filter(models.User.id == id).first()
     if not existing:
         raise HTTPException(status_code=404, detail="User not found")
-    existing.full_name = user.full_name
+    existing.first_name = user.first_name
+    existing.last_name = user.last_name
     existing.hashed_password = pwd_context.hash(user.password)
     db.commit()
     db.refresh(existing)

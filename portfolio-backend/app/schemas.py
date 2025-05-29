@@ -14,21 +14,31 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     email: str
-    full_name: str
+    first_name: str
+    last_name: str
+    role: str
     password: str
 
 class UserRead(UserBase):
     id: int
-    full_name: str
+    first_name: str
+    last_name: str
+    role: str
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
 
 class UserUpdate(UserBase):
-    full_name: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    role: Optional[str] = None
     password: Optional[str] = None
     updated_at: Optional[datetime] = None
 
 class UserResponse(UserBase):
     id: int
-    full_name: str  
+    first_name: str
+    last_name: str
+    role: str
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 
