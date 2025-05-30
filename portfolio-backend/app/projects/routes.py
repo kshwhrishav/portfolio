@@ -17,7 +17,7 @@ from app.models.user import User
 
 router = APIRouter(prefix="/projects", tags=["Projects"])
 
-@router.get("/projects/{user_id}", response_model=list[ProjectResponse])
+@router.get("/{user_id}", response_model=list[ProjectResponse])
 def read_projects_by_user(
     user_id: int,
     db: Session = Depends(get_db),
@@ -25,7 +25,7 @@ def read_projects_by_user(
 ):
     return get_projects_by_user(db, user_id=user_id)
 
-@router.post("/projects", response_model=ProjectResponse)
+@router.post("/", response_model=ProjectResponse)
 def create_project(
     project: ProjectCreate,
     db: Session = Depends(get_db),
@@ -33,7 +33,7 @@ def create_project(
 ):
     return create_user_project(db, project=project, user_id=current_user.id)    
 
-@router.put("/projects/{project_id}", response_model=ProjectResponse)
+@router.put("/{project_id}", response_model=ProjectResponse)
 def update_project_by_id(
     project_id: int,
     project: ProjectUpdate,
@@ -42,7 +42,7 @@ def update_project_by_id(
 ):
     return update_project(db, project_id=project_id, project=project)
 
-@router.delete("/projects/{project_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{project_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_project_by_id(
     project_id: int,
     db: Session = Depends(get_db),
