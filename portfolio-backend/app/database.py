@@ -11,10 +11,16 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 Base = declarative_base()
 
-# Dependency
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
+def init_db():
+    # Import models to register them with SQLAlchemy
+    from app.models import User, Project
+    Base.metadata.create_all(bind=engine)
+
+__all__ = ['Base', 'SessionLocal', 'engine', 'get_db', 'init_db']

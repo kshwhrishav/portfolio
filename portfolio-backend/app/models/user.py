@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from datetime import datetime
-from .database import Base
+from sqlalchemy.orm import relationship
+from app.database import Base
 
 class User(Base):
     __tablename__ = "users"
@@ -13,3 +14,6 @@ class User(Base):
     role = Column(String, default="user")
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Relationships
+    projects = relationship("Project", back_populates="owner", cascade="all, delete-orphan")
