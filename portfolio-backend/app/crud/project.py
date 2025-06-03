@@ -23,27 +23,31 @@ def get_projects_by_user(
         .all()
     )
 
-def create_user_project(
-    db: Session, 
-    project: ProjectCreate, 
-    user_id: int
-) -> Project:
-    """Create a new project for a specific user."""
-    db_project = Project(**project.dict(), user_id=user_id)
+def create_user_project(db: Session, project: ProjectCreate, user_id: int):
+    db_project = Project(
+        title=project.title,
+        description=project.description,
+        tech_stack=project.tech_stack,
+        live_url=str(project.live_url),      # convert HttpUrl to str
+        github_url=str(project.github_url),  # convert HttpUrl to str
+        image_url=str(project.image_url),    # convert HttpUrl to str
+        user_id=user_id
+    )
     db.add(db_project)
     db.commit()
     db.refresh(db_project)
-    return db_project
+    return True
+
 
 def update_project(
     db: Session, 
     project_id: int, 
     project: ProjectUpdate
-) -> Optional[Project]:
+) -> bool:
     """Update a project's information."""
     db_project = get_project(db, project_id=project_id)
     if not db_project:
-        return None
+        return False
     
     update_data = project.dict(exclude_unset=True)
     for field, value in update_data.items():
@@ -52,14 +56,14 @@ def update_project(
     db.add(db_project)
     db.commit()
     db.refresh(db_project)
-    return db_project
+    return True
 
-def delete_project(db: Session, project_id: int) -> Optional[Project]:
-    """Delete a project by ID."""
+def delete_project(db: Session, project_id: int) -> bool:
     db_project = get_project(db, project_id=project_id)
     if not db_project:
-        return None
+        return False
     
     db.delete(db_project)
     db.commit()
-    return db_project
+    return True
+
