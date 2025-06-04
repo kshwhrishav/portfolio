@@ -17,3 +17,4 @@ class User(Base):
 
     # Relationships
     projects = relationship("Project", back_populates="owner", cascade="all, delete-orphan")
+    profile = relationship("Profile", uselist=False, back_populates="user")
